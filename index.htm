@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></link>
+	<!--link rel="stylesheet" href="http://localhost:8080/Mumodamas/public/css/defaultLayout.css"></link-->
+	<link rel="stylesheet" href="public/css/defaultLayout.css"></link>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+	<!--script src="http://localhost:8080/Mumodamas/public/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
+	<script src="http://localhost:8080/Mumodamas/public/js/formulaireApp.js"></script-->
+	<script src="public/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
+	<script src="public/js/formulaireApp.js"></script>
+</head>
+<body>
+	<div 	data-ng-app="formulaire"
+			data-ng-controller="DomainCtrl"
+			class="container">
+		
+		<div 	class="page-header">
+			<h1>Bienvenue sur le domaine {{currentDomain.domain.name}} <small>Gestion de formulaires</small></h1>
+		</div>
+		
+		<pre>{{currentDomain.lastResponse}}</pre>
+		
+		<div data-ng-controller="DomainTabsCtrl">
+			<tabset>
+			
+			
+<tab select="loadData()">
+	<tab-heading>
+		<img data-ng-show="currentDomain.isLoading" src="public/img/ajax-loader.gif"></img> Formulaires
+	</tab-heading>
+	
+	Not implemented : Formulaires <br />
+	<pre>{{currentDomain.isLoading}}</pre>
+	<button type="button" class="btn btn-primary"
+			data-ng-model="currentDomain.isLoading" btn-checkbox>
+		Loading
+	</button>
+</tab>
+<tab select="loadData()">
+	<tab-heading>
+		<img data-ng-show="currentDomain.isLoading" src="public/img/ajax-loader.gif"></img> Données
+	</tab-heading>
+	
+	<div data-ng-controller="UnitDataTabCtrl">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Données du domain</h3>
+			</div>
+			<div class="panel-body">
+				<div	class="animate-repeat"
+						data-ng-repeat="data in currentDomain.domain.datas | filter:{unit:true}">
+					<div 	class="input-group">
+						<div data-ng-hide="{{destroyingUnitDataTab.indexOf(data.name) != -1}}" class="input-group-btn">
+							<button class="btn btn-default dataTableIcons" data-ng-click="destroyUnitData(data)" tooltip="Destroy this data from the domain">
+								<i class="glyphicon glyphicon-minus"></i>
+							</button>
+						</div>
+						<span data-ng-show="{{destroyingUnitDataTab.indexOf(data.name) != -1}}" class="input-group-addon dataTableIcons">
+							<img src="public/img/ajax-loader.gif"></img>
+						</span>
+						<input disabled type="text" data-ng-model="data.name" class="form-control"></input>
+						<!--span class="input-group-addon dataTableIcons">
+							{{data.unit | checkmark}}
+						</span-->
+						<div class="input-group-btn">
+							<button class="btn btn-default dataTableIcons" data-ng-click="viewUnitData(data)" tooltip="View details">
+								<i class="glyphicon glyphicon-zoom-in"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+				<form name="formTestVMA"><div class="input-group">
+					<div data-ng-hide="buildingUnitData" class="input-group-btn">
+						<button class="btn btn-default dataTableIcons" data-ng-click="buildUnitData()" tooltip="Build a new data {{newUnitDataName}} in the domain">
+							<i class="glyphicon glyphicon-plus"></i>
+						</button>
+					</div>
+					<span data-ng-show="buildingUnitData" class="input-group-addon dataTableIcons">
+						<img src="public/img/ajax-loader.gif"></img>
+					</span>
+					<input name="inputTestVMA" type="text" pattern="[A-Za-z0-9]+" data-ng-model="newUnitDataName" class="form-control">
+					<div class="input-group-btn">
+						<button disabled class="btn btn-default dataTableIcons" data-ng-click="viewUnitData(data)" tooltip="View details">
+							<i class="glyphicon glyphicon-zoom-in"></i>
+						</button>
+					</div>
+				</div></form>
+								
+			</div>
+		</div>
+		
+						
+		<div 	data-ng-controller="UnitDataCtrl" class="panel panel-info"
+				data-ng-repeat="dataItem in currentDomain.displayedDatas">
+			<div class="panel-heading" data-ng-click="hideData($index)">
+				<h3 class="panel-title">{{ dataItem.name }}</h3>
+			</div>
+			<div class="panel-body">
+				<form data-ng-repeat="valueItem in dataItem.values">
+					<div 	class="input-group" data-ng-controller="UnitValueCtrl"
+							data-ng-init="oldValue=valueItem.value">
+						<div class="input-group-btn">
+							<button class="btn btn-default dataTableIcons" data-ng-click="deleteUnitValue(dataItem, valueItem)">
+								<i class="glyphicon glyphicon-minus"></i>
+							</button>
+						</div>
+						<span class="input-group-addon dataTableIcons">
+							{{ valueItem.id }}
+						</span>
+						<input 	type="text" data-ng-model="valueItem.value" class="form-control"></input>
+						<div class="input-group-btn">
+							<button 	class="btn btn-default dataTableIcons" ng-click="updateUnitValue(dataItem, valueItem)"
+									 data-ng-disable="{{ oldValue == valueItem.value }}">
+								<i class="glyphicon glyphicon-ok"></i>
+							</button>
+						</div>
+						<div class="input-group-btn">
+							<button 	class="btn btn-default dataTableIcons" ng-click="revertUnitValue(dataItem, valueItem)"
+									 data-ng-disable="oldValue == valueItem.value">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button>
+						</div>
+					</div>
+				</form>
+				<form><div class="input-group">
+					<div class="input-group-btn">
+						<button class="btn btn-default dataTableIcons" ng-click="createUnitValue(dataItem)">
+							<i class="glyphicon glyphicon-plus"></i>
+						</button>
+					</div>
+					<span class="input-group-addon dataTableIcons">
+						N/C
+					</span>
+					<input type="text" data-ng-model="newValueItem.value" class="form-control"></input>
+				</div></form>
+			</div>
+			
+		</div>
+	</div>
+</tab>
+<tab select="loadData()">
+	<tab-heading>
+		<img data-ng-show="currentDomain.isLoading" src="public/img/ajax-loader.gif"></img> Sous-domaines
+	</tab-heading>
+	Not implemented : Sous-domaines
+</tab>
+<tab select="loadUsers()">
+	<tab-heading>
+		<img data-ng-show="userLoading" src="public/img/ajax-loader.gif"></img> Utilisateurs
+	</tab-heading>
+	Not implemented : Utilisateurs
+</tab>
+<tab select="loadUsers()">
+	<tab-heading>
+		<img data-ng-show="userLoading" src="public/img/ajax-loader.gif"></img> Script
+	</tab-heading>
+	Not implemented : Script
+</tab>
+
+
+
+
+
+
+			</tabset>
+		</div>
+		
+	</div>
+</body>
+</html>

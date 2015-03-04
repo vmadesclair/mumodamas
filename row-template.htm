@@ -1,0 +1,30 @@
+<tr data-ng-enter="rowUpdate()">
+    <td>
+        <a data-ng-click="rowDelete()">
+            <i class="glyphicon glyphicon-minus"></i>
+        </a>
+    </td>
+    
+    <td class="pre-commit" data-ng-repeat="(key,value) in tableRowContext.row">
+        <input data-ng-change="modified(key, value)" data-ng-model="value"></input>
+    </td>
+    <td class="pre-revert" data-ng-repeat="(key,value) in tableRowContext.originalRow">
+        <input data-ng-model="value"></input>
+    </td>
+    
+    <td>
+        <a class="need-change" data-ng-click="rowUpdate()">
+            <i class="glyphicon glyphicon-ok"></i>
+        </a>
+    </td>
+    <td>
+        <a class="need-change" data-ng-click="rowCancel()" data-ng-mouseover="revertPreviewMOver()" data-ng-mouseleave="revertPreviewMOut()">
+           <i class="glyphicon glyphicon-remove"></i>
+        </a>
+    </td>
+    <td>
+        <a data-ng-click="rowRead(row)">
+			<i class="glyphicon glyphicon-zoom-in"></i>
+		</a>
+    </td>
+</tr>

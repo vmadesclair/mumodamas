@@ -1,0 +1,50 @@
+<div class="table-panel">
+    <table>
+        <tr>
+            <th></th>
+            <th data-ng-repeat="(key,value) in tableRows[0]">
+                <span>
+                    {{key}}
+                </span>
+            </th>
+            <th></th>
+            <th>
+                <a data-ng-show="{{ tableContext.cancelBtn }}" class="need-history" data-ng-click="tableCancel()">
+				    <i class="glyphicon glyphicon-share-alt mirrorX"></i>
+                    <span>{{ tableContext.history.length - 1 }}</span>
+				</a>
+            </th>
+            <th>
+                <a data-ng-click="tableCancel()">
+				    <i class="glyphicon glyphicon-zoom-in"></i>
+				</a>
+            </th>
+        </tr>
+        <tr dynamic-table-row data-ng-repeat="row in tableRows" item="row" functions="tableFunctions"></tr>
+        <tr data-ng-enter="tableFunctions.tCreate()">
+            <td>
+                <a data-ng-click="tableFunctions.tCreate()">
+				    <i class="glyphicon glyphicon-plus"></i>
+				</a>
+            </td>
+            <td data-ng-repeat="(key,value) in tableRows[0]">
+                <input data-ng-model="tableContext.newRow[key]"></input>
+            </td>
+            <td>
+                <a class="disabled">
+					<i class="glyphicon glyphicon-ok"></i>
+				</a>
+            </td>
+            <td>
+				<a class="disabled">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </a>
+            </td>
+            <td>
+                <a class="disabled">
+					<i class="glyphicon glyphicon-zoom-in"></i>
+				</a>
+            </td>
+        </tr>
+    </table>
+</div>

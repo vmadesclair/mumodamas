@@ -1,0 +1,153 @@
+/* ----------------------------- Actions ------------------------------- */
+div.table-panel > table a {
+    width: 100%;
+    text-align: center;
+    /*color: #000;*/
+    color: #31708f;
+    background-color: hsl(200, 65%, 91%);
+    margin: 0px 0px 0px 0px;
+    vertical-align: middle;
+    display: inline-block;
+    backface-visibility: hidden;
+    /*box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    transform: translateZ(0px);*/
+    transition-duration: 0.6s;
+    transition-property: box-shadow, background-color, color;
+}
+div.table-panel > table a:hover,
+div.table-panel > table a:focus,
+div.table-panel > table a:active {
+    color: #000;
+    background-color: hsl(200, 65%, 80%);
+    cursor: pointer;
+    box-shadow: 0 0 3px 1px hsl(200, 65%, 50%);
+}
+/*div.table-panel > table a.disabled {
+    color: #CCCCCC;
+    cursor: default;
+    box-shadow: none;
+    background-color: hsl(200, 65%, 91%);
+}*/
+div.table-panel > table a.need-history{
+    position: relative;
+    left: -2px;
+}
+div.table-panel > table a.disabled, 
+div.table-panel.no-history > table a.need-history,
+div.table-panel.no-history > table a.need-history:active,
+div.table-panel.no-history > table a.need-history:hover, 
+div.table-panel > table tr.unchanged a.need-change,
+div.table-panel > table tr.unchanged a.need-change:active,
+div.table-panel > table tr.unchanged a.need-change:hover {
+    width: 100%;
+    color: #CCCCCC;
+    background-color: hsl(200, 65%, 91%);
+    cursor: default;
+    box-shadow: none;
+}
+div.table-panel > table a.need-history > span {
+    position:absolute;
+    bottom: -2px;
+    right: -2px;
+    font-size: x-small;
+}
+/*div.table-panel > table tr.unchanged a.need-change,
+div.table-panel > table tr.unchanged a.need-change:active,
+div.table-panel > table tr.unchanged a.need-change:hover {
+    width: 100%;
+    color: #CCCCCC;
+    background-color: hsl(200, 65%, 91%);
+    cursor: default;
+    box-shadow: none;
+}*/
+
+
+/* ----------------------------- Inputs ------------------------------- */
+input:focus {
+    box-shadow: inset 0 0 1px 1px hsl(200, 65%, 80%);
+}
+
+
+/* ----------------------------- Tools -------------------------------- */
+i.mirrorX {
+    transform: scaleX(-1);
+}
+
+/* ----------------------------- Tables ------------------------------- */
+div.table-panel {
+    margin : 5px; 
+    border: 2px solid #31708f;
+    /*border-style: solid;
+    border-width: 1px;
+    border-color: #31708f;*/
+    border-radius: 8px;
+}
+div.table-panel > table {
+    width: 100%;
+}
+div.table-panel > table tr:first-child th:first-child {
+    border-radius: 8px 0 0 0;
+}
+div.table-panel > table tr:first-child th:last-child {
+    border-radius: 0 8px 0 0;
+}
+div.table-panel > table tr:last-child td:first-child {
+    border-radius: 0 0 0 8px;
+}
+div.table-panel > table tr:last-child td:last-child {
+    border-radius: 0 0 8px 0;
+}
+div.table-panel tr {
+    border-top: solid 1px #CCCCCC;
+    border-bottom: none;
+    background-color: hsl(200, 65%, 91%);
+}
+div.table-panel tr td.pre-revert {
+    display: none;
+}
+div.table-panel tr td.pre-commit {
+    display: table-cell;
+}
+div.table-panel tr.changed.revert-preview td.pre-commit {
+    display: none;
+}
+div.table-panel tr.changed.revert-preview td.pre-revert {
+    display: table-cell;
+}
+div.table-panel tr:hover  td > input {
+    background-color: hsl(200, 65%, 91%);
+}
+div.table-panel tr.changed:hover  td > input {
+    background-color: hsl(0, 65%, 85%);
+}
+div.table-panel tr.changed td > input {
+    background-color: hsl(0, 65%, 91%);
+}
+div.table-panel tr:first-child {
+    border-top: solid 0px #CCCCCC;
+    background-color: #d9edf7;
+    color: #31708f;
+    border-bottom: none;
+}
+/*div.table-panel tr:first-child {
+    border-top: solid 0px #CCCCCC;
+    background-color: #d9edf7;
+    color: #31708f;
+    border-bottom: none;
+}*/
+div.table-panel td {
+    border-left: solid 1px #CCCCCC;
+}
+div.table-panel td:first-child {
+    border-left: solid 0px #CCCCCC;
+}
+/*div.table-panel td.action-item {
+    width: 30px;
+}*/
+div.table-panel td > input,
+div.table-panel th > span {
+    width: 100%;
+    margin: 0px;
+    padding-left: 10px;
+    border: none;
+}
