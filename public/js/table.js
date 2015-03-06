@@ -1,3 +1,6 @@
+/*jslint vars: true*/
+/*global app,angular,alert,confirm */
+
 
 /**
  * TODO : Régler le pb du chargement d'un tableau vide
@@ -6,6 +9,7 @@
  */
 
 app.directive("dynamicTable", function () {
+    'use strict';
 	function DynTableCtrl($scope, $timeout) {
         // Variables
         $scope.tableContext = {
@@ -59,12 +63,14 @@ app.directive("dynamicTable", function () {
                 var addedItem = {};
                 var prop;
                 for (prop in $scope.tableContext.newRow) {
-                    addedItem[prop] = $scope.tableContext.newRow[prop];
-                    $scope.tableContext.newRow[prop] = "";
+                    if ($scope.tableContext.newRow.hasOwnProperty(prop)) {
+                        addedItem[prop] = $scope.tableContext.newRow[prop];
+                        $scope.tableContext.newRow[prop] = "";
+                    }
                 }
                 $scope.tableRows.push(addedItem);
                 $scope.addHistory($scope.tableRows);
-                if ($scope.externals.fCreate){
+                if ($scope.externals.fCreate) {
                     $scope.externals.fCreate();
                 }
             },
@@ -72,7 +78,7 @@ app.directive("dynamicTable", function () {
                 var idx = $scope.tableRows.indexOf(oldItem);
                 $scope.tableRows.splice(idx, 1, newItem);
                 $scope.addHistory($scope.tableRows);
-                if ($scope.externals.fUpdate){
+                if ($scope.externals.fUpdate) {
                     $scope.externals.fUpdate(oldItem, newItem);
                 }
             },
@@ -80,27 +86,27 @@ app.directive("dynamicTable", function () {
                 var idx = $scope.tableRows.indexOf(item);
                 $scope.tableRows.splice(idx, 1);
                 $scope.addHistory($scope.tableRows);
-                if ($scope.externals.fDelete){
+                if ($scope.externals.fDelete) {
                     $scope.externals.fDelete();
                 }
             },
             tRead : function (item) {
                 //TODO
-                if ($scope.externals.fRead){
+                if ($scope.externals.fRead) {
                     $scope.externals.fRead();
                 }
             },
             tModify : function () {
-                if ($scope.externals.fModify){
+                if ($scope.externals.fModify) {
                     $scope.externals.fModify();
                 }
             }
         };
         
         // Event management
-        $scope.$on('DynamicTableCancel', function() {
+        $scope.$on('DynamicTableCancel', function () {
             $timeout.cancel($scope.tmr);
-            $scope.tmr = $timeout(function() {
+            $scope.tmr = $timeout(function () {
                 $scope.tableCancel();
             }, 500); //timeout to prevent some IHM behavior pb
         });
@@ -124,13 +130,14 @@ app.directive("dynamicTable", function () {
 });
 
 app.directive("dynamicTableRow", function () {
+    'use strict';
 	function DynTableRowCtrl($scope, $timeout) {
         $scope.tableRowContext = {
             row : angular.copy($scope.item),
             originalRow : $scope.item
         };
         $scope.rowUpdate = function () {
-            if ($scope.rowElement.hasClass("changed")){
+            if ($scope.rowElement.hasClass("changed")) {
                 $scope.rowElement.addClass("unchanged");
                 $scope.rowElement.removeClass("changed");
                 $scope.externals.tUpdate($scope.item, $scope.tableRowContext.row);
@@ -138,7 +145,7 @@ app.directive("dynamicTableRow", function () {
             }
         };
         $scope.rowCancel = function () {
-            if ($scope.rowElement.hasClass("changed")){
+            if ($scope.rowElement.hasClass("changed")) {
                 if (confirm("This will cancel all changes in this row until the last validation.")) {
                     $scope.tableRowContext.row = angular.copy($scope.tableRowContext.originalRow);
                     $scope.rowElement.addClass("unchanged");
@@ -158,7 +165,7 @@ app.directive("dynamicTableRow", function () {
         $scope.revertPreviewMOut = function () {
             $scope.rowElement.removeClass("revert-preview");
         };
-        $scope.modified = function (key, value){
+        $scope.modified = function (key, value) {
             $scope.tableRowContext.row[key] = value;
             $scope.rowElement.removeClass("unchanged");
             $scope.rowElement.addClass("changed");
@@ -183,18 +190,47 @@ app.directive("dynamicTableRow", function () {
 });
 
 app.directive('ngEnter', ['$timeout', function ($timeout) {
+    'use strict';
     return {
         link: function ($scope, element, attrs) {
             element.bind("keydown keypress", function (event) {
-                if(event.which === 13) {
+                if (event.which === 13) {
                     $timeout.cancel($scope.tmr);
-                    $scope.tmr = $timeout(function() {
-                        $scope.$apply(function (){
+                    $scope.tmr = $timeout(function () {
+                        $scope.$apply(function () {
                             $scope.$eval(attrs.ngEnter);
                         });
                         event.preventDefault();
                     }, 10); //timeout to prevent some angular exception
                 }
+            });
+        }
+    };
+}]);
+
+app.directive('ngEnableLoader', ['$timeout', function ($timeout) {
+    'use strict';
+    return {
+        restrict: 'A',
+        transclude: true,
+        replace: false,
+		scope: { },
+        templateUrl: '../../loadable-template.htm',
+        link: function ($scope, element, attrs) {
+            element.addClass("loaded");
+            $scope.$on("loading", function (event) {
+                element.removeClass("loaded");
+                element.addClass("loading");
+                $timeout.cancel($scope.tmr);
+                $scope.tmr = $timeout(function () {
+                    element.removeClass("loading");
+                    element.addClass("loaded");
+                }, 10000); //timeout on the loader : 10s
+            });
+            $scope.$on("loaded", function (event) {
+                $timeout.cancel($scope.tmr);
+                element.removeClass("loading");
+                element.addClass("loaded");
             });
         }
     };

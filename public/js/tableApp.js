@@ -1,6 +1,10 @@
+/*jslint vars: true*/
+/*global angular,alert,confirm */
+
 var app = angular.module('tableApp', ['ui.bootstrap']);
 
 app.controller("MainCtrl", ['$scope', function ($scope) {
+    'use strict';
 	$scope.visualisationContext = {
         customers : [
             {
@@ -42,9 +46,16 @@ app.controller("MainCtrl", ['$scope', function ($scope) {
     };
     $scope.nb = 0;
     $scope.reload = function () {
-        $scope.nb++;
+        $scope.nb = $scope.nb + 1;
         $scope.visualisationContext.customers[2].Nom = "reloaded " + $scope.nb;
-    }
+    };
+    
+    $scope.startLoad = function () {
+        $scope.$broadcast("loading");
+    };
+    $scope.stopLoad = function () {
+        $scope.$broadcast("loaded");
+    };
     
 }]);
 

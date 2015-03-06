@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8" />
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></link>
-	<!--link rel="stylesheet" href="http://localhost:8080/Mumodamas/public/css/defaultLayout.css"></link-->
-	<link rel="stylesheet" href="public/css/defaultLayout.css"></link>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
-	<!--script src="http://localhost:8080/Mumodamas/public/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
-	<script src="http://localhost:8080/Mumodamas/public/js/formulaireApp.js"></script-->
-	<script src="public/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
-	<script src="public/js/tableApp.js"></script>
-	<script src="public/js/table.js"></script>
-	<link rel="stylesheet" href="public/css/table.css"></link>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></link>
+    <!--link rel="stylesheet" href="http://localhost:8080/Mumodamas/public/css/defaultLayout.css"></link-->
+    <link rel="stylesheet" href="public/css/defaultLayout.css"></link>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+<!--script src="http://localhost:8080/Mumodamas/public/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
+<script src="http://localhost:8080/Mumodamas/public/js/formulaireApp.js"></script-->
+<script src="public/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
+<script src="public/js/tableApp.js"></script>
+<script src="public/js/table.js"></script>
+<link rel="stylesheet" href="public/css/table.css"></link>
+<link rel="stylesheet" href="public/css/loader.css"></link>
 </head>
 <body>
-	<div	data-ng-app="tableApp"
-			data-ng-controller="MainCtrl"
-			class="container">
-			
-		<dynamic-table rows="visualisationContext.customers" functions="visualisationContext.functions"></dynamic-table>
-		
+    <div	data-ng-app="tableApp"
+         data-ng-controller="MainCtrl"
+         class="container">
+
+        <div data-ng-enable-loader>
+            <dynamic-table rows="visualisationContext.customers" functions="visualisationContext.functions"></dynamic-table>
+        </div>
+
         <p/>
-        <input type="button" data-ng-click="reload()" value="Reload" />
+        <input type="button" data-ng-click="startLoad()" value="Start loading" />
+        <input type="button" data-ng-click="stopLoad()" value="Stop loading" />
+        <p/>
+        <input type="button" data-ng-click="reload()" value="Reload field" />
         <p/>
         <p>Test :</p>
         <table style="padding:5px; border: solid 1px #000;">
@@ -40,7 +46,7 @@
                 </td>
             </tr>
         </table>
-	</div>
+    </div>
 
 </body>
 </html>
