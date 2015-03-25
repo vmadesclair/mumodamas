@@ -2,17 +2,11 @@
 /*global app,angular,alert,confirm */
 
 
-/**
- * TODO : Régler le pb du chargement d'un tableau vide
- * Il s'agit du mm pb de champs non initialisé lors de la création d'une ligne
- * -> Décallages de champs. Le format d'entrée doit être différent
- */
-
 app.directive("dynamicTable", function () {
     'use strict';
 	function DynTableCtrl($scope, $timeout) {
         // Loop var
-        var key, item;
+        var i, key, item;
         
         // Variables
         $scope.tableContext = {
@@ -35,8 +29,14 @@ app.directive("dynamicTable", function () {
                     }
                 }
             }
-            
         }
+        
+        item = {};
+        for (i = 0; i < $scope.tableHead.length; i = i + 1) {
+            key = $scope.tableHead[i];
+            item[key.dataName] = '';
+        }
+        $scope.tableContext.newRow = item;
         
         // Functions
         $scope.hasHistory = function () {
@@ -78,6 +78,14 @@ app.directive("dynamicTable", function () {
         };
         $scope.tableFunctions = {
             tCreate : function () {
+                /*var addedItem = angular.copy($scope.tableContext.newRow);*/
+                item = {};
+                for (i = 0; i < $scope.tableHead.length; i = i + 1) {
+                    key = $scope.tableHead[i];
+                    item[key.dataName] = '';
+                }
+                
+                /*
                 var addedItem = {};
                 var prop;
                 for (prop in $scope.tableContext.newRow) {
@@ -85,8 +93,9 @@ app.directive("dynamicTable", function () {
                         addedItem[prop] = $scope.tableContext.newRow[prop];
                         $scope.tableContext.newRow[prop] = "";
                     }
-                }
-                $scope.tableRows.push(addedItem);
+                }*/
+                $scope.tableRows.push($scope.tableContext.newRow);
+                $scope.tableContext.newRow = item;
                 $scope.addHistory($scope.tableRows);
                 if ($scope.externals.fCreate) {
                     $scope.externals.fCreate();
@@ -202,6 +211,7 @@ app.directive("dynamicTableRow", function () {
         replace: true,
 		scope: {
             item: '=',
+            columns: '=',
             externals: '=functions'
 		},
 		templateUrl: 'row-template.htm'

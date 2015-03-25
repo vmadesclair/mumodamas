@@ -5,12 +5,21 @@
         </a>
     </td>
     
-    <td class="pre-commit" data-ng-repeat="(key,value) in tableRowContext.row">
+    <td class="pre-commit" data-ng-repeat="column in columns">
+        <!--{{ column.dataName + " " + tableRowContext.row[column.dataName] }}-->
+        <input data-ng-change="modified(column.dataName, tableRowContext.row[column.dataName])" data-ng-model="tableRowContext.row[column.dataName]"></input>
+    </td>
+    <td class="pre-revert" data-ng-repeat="column in columns">
+        <!--{{ column.dataName + " " + tableRowContext.originalRow[column.dataName] }}-->
+        <input data-ng-model="tableRowContext.originalRow[column.dataName]"></input>
+    </td>
+    
+    <!--td class="pre-commit" data-ng-repeat="(key,value) in tableRowContext.row">
         <input data-ng-change="modified(key, value)" data-ng-model="value"></input>
     </td>
     <td class="pre-revert" data-ng-repeat="(key,value) in tableRowContext.originalRow">
         <input data-ng-model="value"></input>
-    </td>
+    </td-->
     
     <td>
         <a class="need-change" data-ng-click="rowUpdate()">

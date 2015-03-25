@@ -20,7 +20,7 @@
 				</a>
             </th>
         </tr>
-        <tr dynamic-table-row data-ng-repeat="row in tableRows" item="row" functions="tableFunctions"></tr>
+        <tr dynamic-table-row data-ng-repeat="row in tableRows" item="row" columns="tableHead" functions="tableFunctions"></tr>
         <tr data-ng-enter="tableFunctions.tCreate()">
             <td>
                 <a data-ng-click="tableFunctions.tCreate()">
@@ -28,6 +28,7 @@
 				</a>
             </td>
             <td data-ng-repeat="header in tableHead">
+                <!--{{ header.dataName + " " + tableContext.newRow[header.dataName] }}-->
                 <input data-ng-model="tableContext.newRow[header.dataName]"></input>
             </td>
             <td>

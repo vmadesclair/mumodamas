@@ -40,9 +40,9 @@
                 </th>
             </tr>
             <tr data-ng-repeat="row in visualisationContext.customers.content" style="padding:5px; border: solid 1px #000;">
-                <td data-ng-repeat="(key,value) in row" style="padding:5px; border: solid 1px #000;">
+                <td data-ng-repeat="data in visualisationContext.customers.headers" style="padding:5px; border: solid 1px #000;">
                     <span style="padding:5px;">
-                        {{value}}
+                        {{ row[data.dataName] }}
                     </span>
                 </td>
             </tr>
