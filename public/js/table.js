@@ -11,6 +11,9 @@
 app.directive("dynamicTable", function () {
     'use strict';
 	function DynTableCtrl($scope, $timeout) {
+        // Loop var
+        var key, item;
+        
         // Variables
         $scope.tableContext = {
             cancelBtn : true,
@@ -19,6 +22,21 @@ app.directive("dynamicTable", function () {
             history : [ angular.copy($scope.tableRows) ]
         };
         $scope.tmr = undefined; //cancellation timer
+        
+        if (typeof $scope.tableHead === 'undefined' || typeof $scope.tableHead.length === 'undefined' || $scope.tableHead.length === 0) {
+            $scope.tableHead = [];
+            if (typeof $scope.tableRows === 'undefined' || typeof $scope.tableRows.length === 'undefined' || $scope.tableRows.length === 0 || typeof $scope.tableRows[0] === 'undefined') {
+                $scope.tableElement.addClass("load-error");
+            } else {
+                for (key in $scope.tableRows[0]) {
+                    if ($scope.tableRows[0].hasOwnProperty(key) && key.slice(0, 2) !== '$$') {
+                        item = { "dataName": key };
+                        $scope.tableHead.push(item);
+                    }
+                }
+            }
+            
+        }
         
         // Functions
         $scope.hasHistory = function () {
@@ -122,6 +140,7 @@ app.directive("dynamicTable", function () {
         transclude: false,
         replace: true,
 		scope: {
+            tableHead: '=headers',
             tableRows: '=rows',
             externals: '=functions'
 		},
@@ -219,18 +238,27 @@ app.directive('ngEnableLoader', ['$timeout', function ($timeout) {
         link: function ($scope, element, attrs) {
             element.addClass("loaded");
             $scope.$on("loading", function (event) {
+                element.removeClass("load-error");
                 element.removeClass("loaded");
                 element.addClass("loading");
                 $timeout.cancel($scope.tmr);
                 $scope.tmr = $timeout(function () {
                     element.removeClass("loading");
+                    element.removeClass("load-error");
                     element.addClass("loaded");
                 }, 10000); //timeout on the loader : 10s
             });
             $scope.$on("loaded", function (event) {
                 $timeout.cancel($scope.tmr);
                 element.removeClass("loading");
+                element.removeClass("load-error");
                 element.addClass("loaded");
+            });
+            $scope.$on("load-error", function (event) {
+                $timeout.cancel($scope.tmr);
+                element.removeClass("loading");
+                element.removeClass("loaded");
+                element.addClass("load-error");
             });
         }
     };

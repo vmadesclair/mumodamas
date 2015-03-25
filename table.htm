@@ -20,25 +20,26 @@
          class="container">
 
         <div data-ng-enable-loader>
-            <dynamic-table rows="visualisationContext.customers" functions="visualisationContext.functions"></dynamic-table>
+            <dynamic-table headers="visualisationContext.customers.headers" rows="visualisationContext.customers.content" functions="visualisationContext.functions"></dynamic-table>
         </div>
 
         <p/>
         <input type="button" data-ng-click="startLoad()" value="Start loading" />
         <input type="button" data-ng-click="stopLoad()" value="Stop loading" />
+        <input type="button" data-ng-click="errorLoad()" value="Error loading" />
         <p/>
         <input type="button" data-ng-click="reload()" value="Reload field" />
         <p/>
         <p>Test :</p>
         <table style="padding:5px; border: solid 1px #000;">
             <tr style="padding:5px; border: solid 1px #000;">
-                <th data-ng-repeat="(key,value) in visualisationContext.customers[0]" style="padding:5px; border: solid 1px #000;">
+                <th data-ng-repeat="data in visualisationContext.customers.headers" style="padding:5px; border: solid 1px #000;">
                     <span style="padding:5px;">
-                        {{key}}
+                        {{data.dataName}}
                     </span>
                 </th>
             </tr>
-            <tr data-ng-repeat="row in visualisationContext.customers" style="padding:5px; border: solid 1px #000;">
+            <tr data-ng-repeat="row in visualisationContext.customers.content" style="padding:5px; border: solid 1px #000;">
                 <td data-ng-repeat="(key,value) in row" style="padding:5px; border: solid 1px #000;">
                     <span style="padding:5px;">
                         {{value}}

@@ -6,23 +6,30 @@ var app = angular.module('tableApp', ['ui.bootstrap']);
 app.controller("MainCtrl", ['$scope', function ($scope) {
     'use strict';
 	$scope.visualisationContext = {
-        customers : [
-            {
-                "Prénom": "Vivian",
-                "Nom": "Madesclair",
-                "Age": "28"
-            },
-            {
-                "Prénom": "Pascal",
-                "Nom": "Madesclair",
-                "Age": "25"
-            },
-            {
-                "Prénom": "Loic",
-                "Nom": "Kaemmerlen",
-                "Age": "24"
-            }
-        ],
+        customers : {
+            headers : [
+                {"dataName": "Prénom", "test": "test!!"},
+                {"dataName": "Nom"},
+                {"dataName": "Age"}
+            ],
+            content : [
+                /*{
+                    "Prénom": "Vivian",
+                    "Nom": "Madesclair",
+                    "Age": "28"
+                },
+                {
+                    "Prénom": "Pascal",
+                    "Nom": "Madesclair",
+                    "Age": "25"
+                },
+                {
+                    "Prénom": "Loic",
+                    "Nom": "Kaemmerlen",
+                    "Age": "24"
+                }*/
+            ]
+        },
         functions : {
             fCreate : function () {
                 if (!confirm("Test create")) {
@@ -55,6 +62,9 @@ app.controller("MainCtrl", ['$scope', function ($scope) {
     };
     $scope.stopLoad = function () {
         $scope.$broadcast("loaded");
+    };
+    $scope.errorLoad = function () {
+        $scope.$broadcast("load-error");
     };
     
 }]);

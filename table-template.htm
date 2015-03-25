@@ -2,9 +2,9 @@
     <table>
         <tr>
             <th></th>
-            <th data-ng-repeat="(key,value) in tableRows[0]">
+            <th data-ng-repeat="header in tableHead">
                 <span>
-                    {{key}}
+                    {{header.dataName}}
                 </span>
             </th>
             <th></th>
@@ -27,8 +27,8 @@
 				    <i class="glyphicon glyphicon-plus"></i>
 				</a>
             </td>
-            <td data-ng-repeat="(key,value) in tableRows[0]">
-                <input data-ng-model="tableContext.newRow[key]"></input>
+            <td data-ng-repeat="header in tableHead">
+                <input data-ng-model="tableContext.newRow[header.dataName]"></input>
             </td>
             <td>
                 <a class="disabled">
