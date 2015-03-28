@@ -3,13 +3,13 @@
 <head>
 	<meta charset="UTF-8" />
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></link>
-	<!--link rel="stylesheet" href="http://localhost:8080/Mumodamas/public/css/defaultLayout.css"></link-->
 	<link rel="stylesheet" href="public/css/defaultLayout.css"></link>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
-	<!--script src="http://localhost:8080/Mumodamas/public/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
-	<script src="http://localhost:8080/Mumodamas/public/js/formulaireApp.js"></script-->
 	<script src="public/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
 	<script src="public/js/formulaireApp.js"></script>
+    <script src="public/js/table.js"></script>
+    <link rel="stylesheet" href="public/css/table.css"></link>
+    <link rel="stylesheet" href="public/css/loader.css"></link>
 </head>
 <body>
 	<div 	data-ng-app="formulaire"
@@ -28,70 +28,43 @@
 			
 <tab select="loadData()">
 	<tab-heading>
-		<img data-ng-show="currentDomain.isLoading" src="public/img/ajax-loader.gif"></img> Formulaires
+		Formulaires
 	</tab-heading>
 	
-	Not implemented : Formulaires <br />
-	<pre>{{currentDomain.isLoading}}</pre>
-	<button type="button" class="btn btn-primary"
-			data-ng-model="currentDomain.isLoading" btn-checkbox>
-		Loading
-	</button>
+    
+    
+	<p>Not implemented : Formulaires</p>
+	
 </tab>
 <tab select="loadData()">
 	<tab-heading>
-		<img data-ng-show="currentDomain.isLoading" src="public/img/ajax-loader.gif"></img> Données
+		Données
 	</tab-heading>
 	
 	<div data-ng-controller="UnitDataTabCtrl">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h3 class="panel-title">Données du domain</h3>
-			</div>
-			<div class="panel-body">
-				<div	class="animate-repeat"
-						data-ng-repeat="data in currentDomain.domain.datas | filter:{unit:true}">
-					<div 	class="input-group">
-						<div data-ng-hide="{{destroyingUnitDataTab.indexOf(data.name) != -1}}" class="input-group-btn">
-							<button class="btn btn-default dataTableIcons" data-ng-click="destroyUnitData(data)" tooltip="Destroy this data from the domain">
-								<i class="glyphicon glyphicon-minus"></i>
-							</button>
-						</div>
-						<span data-ng-show="{{destroyingUnitDataTab.indexOf(data.name) != -1}}" class="input-group-addon dataTableIcons">
-							<img src="public/img/ajax-loader.gif"></img>
-						</span>
-						<input disabled type="text" data-ng-model="data.name" class="form-control"></input>
-						<!--span class="input-group-addon dataTableIcons">
-							{{data.unit | checkmark}}
-						</span-->
-						<div class="input-group-btn">
-							<button class="btn btn-default dataTableIcons" data-ng-click="viewUnitData(data)" tooltip="View details">
-								<i class="glyphicon glyphicon-zoom-in"></i>
-							</button>
-						</div>
-					</div>
-				</div>
-				<form name="formTestVMA"><div class="input-group">
-					<div data-ng-hide="buildingUnitData" class="input-group-btn">
-						<button class="btn btn-default dataTableIcons" data-ng-click="buildUnitData()" tooltip="Build a new data {{newUnitDataName}} in the domain">
-							<i class="glyphicon glyphicon-plus"></i>
-						</button>
-					</div>
-					<span data-ng-show="buildingUnitData" class="input-group-addon dataTableIcons">
-						<img src="public/img/ajax-loader.gif"></img>
-					</span>
-					<input name="inputTestVMA" type="text" pattern="[A-Za-z0-9]+" data-ng-model="newUnitDataName" class="form-control">
-					<div class="input-group-btn">
-						<button disabled class="btn btn-default dataTableIcons" data-ng-click="viewUnitData(data)" tooltip="View details">
-							<i class="glyphicon glyphicon-zoom-in"></i>
-						</button>
-					</div>
-				</div></form>
-								
-			</div>
+			</div>	
+            <div data-ng-enable-loader>
+                <dynamic-table headers="currentDomain.domain.datas.headers" rows="currentDomain.domain.datas.content" functions="functions.domain"></dynamic-table>
+            </div>
 		</div>
 		
+        <div 	data-ng-controller="UnitDataCtrl" class="panel panel-info"
+				data-ng-repeat="dataItem in currentDomain.displayedDatas">
+            <div class="panel-heading" data-ng-click="hideData($index)">
+				<h3 class="panel-title">{{ dataItem.name }}</h3>
+			</div>
+			<div data-ng-enable-loader>
+                <dynamic-table headers="dataItem.values.headers" rows="dataItem.values.content" functions="functions.data"></dynamic-table>
+            </div>
+        </div>
 						
+                
+                
+                
+        <!--
 		<div 	data-ng-controller="UnitDataCtrl" class="panel panel-info"
 				data-ng-repeat="dataItem in currentDomain.displayedDatas">
 			<div class="panel-heading" data-ng-click="hideData($index)">
@@ -137,7 +110,7 @@
 				</div></form>
 			</div>
 			
-		</div>
+		</div>-->
 	</div>
 </tab>
 <tab select="loadData()">

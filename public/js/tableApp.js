@@ -46,7 +46,7 @@ app.controller("MainCtrl", ['$scope', function ($scope) {
                     $scope.$broadcast("DynamicTableCancel");
                 }
             },
-            fRead : function () {
+            fRead : function (dataItem) {
                 alert("Test read");
             }
         }
@@ -67,5 +67,42 @@ app.controller("MainCtrl", ['$scope', function ($scope) {
         $scope.$broadcast("load-error");
     };
     
+}]);
+
+app.directive('ngEnableLoader', ['$timeout', function ($timeout) {
+    'use strict';
+    return {
+        restrict: 'A',
+        transclude: true,
+        replace: false,
+		scope: { },
+        templateUrl: '../../loadable-template.htm',
+        link: function ($scope, element, attrs) {
+            element.addClass("loaded");
+            $scope.$on("loading", function (event) {
+                element.removeClass("load-error");
+                element.removeClass("loaded");
+                element.addClass("loading");
+                $timeout.cancel($scope.tmr);
+                $scope.tmr = $timeout(function () {
+                    element.removeClass("loading");
+                    element.removeClass("load-error");
+                    element.addClass("loaded");
+                }, 10000); //timeout on the loader : 10s
+            });
+            $scope.$on("loaded", function (event) {
+                $timeout.cancel($scope.tmr);
+                element.removeClass("loading");
+                element.removeClass("load-error");
+                element.addClass("loaded");
+            });
+            $scope.$on("load-error", function (event) {
+                $timeout.cancel($scope.tmr);
+                element.removeClass("loading");
+                element.removeClass("loaded");
+                element.addClass("load-error");
+            });
+        }
+    };
 }]);
 

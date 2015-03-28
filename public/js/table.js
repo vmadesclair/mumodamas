@@ -120,7 +120,7 @@ app.directive("dynamicTable", function () {
             tRead : function (item) {
                 //TODO
                 if ($scope.externals.fRead) {
-                    $scope.externals.fRead();
+                    $scope.externals.fRead(item);
                 }
             },
             tModify : function () {
@@ -149,7 +149,7 @@ app.directive("dynamicTable", function () {
         transclude: false,
         replace: true,
 		scope: {
-            tableHead: '=headers',
+            tableHead: '=headers', // This parameter is therefor NEEDED. Pass a non existent value if you don't have it.
             tableRows: '=rows',
             externals: '=functions'
 		},
@@ -232,43 +232,6 @@ app.directive('ngEnter', ['$timeout', function ($timeout) {
                         event.preventDefault();
                     }, 10); //timeout to prevent some angular exception
                 }
-            });
-        }
-    };
-}]);
-
-app.directive('ngEnableLoader', ['$timeout', function ($timeout) {
-    'use strict';
-    return {
-        restrict: 'A',
-        transclude: true,
-        replace: false,
-		scope: { },
-        templateUrl: '../../loadable-template.htm',
-        link: function ($scope, element, attrs) {
-            element.addClass("loaded");
-            $scope.$on("loading", function (event) {
-                element.removeClass("load-error");
-                element.removeClass("loaded");
-                element.addClass("loading");
-                $timeout.cancel($scope.tmr);
-                $scope.tmr = $timeout(function () {
-                    element.removeClass("loading");
-                    element.removeClass("load-error");
-                    element.addClass("loaded");
-                }, 10000); //timeout on the loader : 10s
-            });
-            $scope.$on("loaded", function (event) {
-                $timeout.cancel($scope.tmr);
-                element.removeClass("loading");
-                element.removeClass("load-error");
-                element.addClass("loaded");
-            });
-            $scope.$on("load-error", function (event) {
-                $timeout.cancel($scope.tmr);
-                element.removeClass("loading");
-                element.removeClass("loaded");
-                element.addClass("load-error");
             });
         }
     };
